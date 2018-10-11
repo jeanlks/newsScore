@@ -28,16 +28,25 @@ def get_obj(entries):
                         "timestamp":time.time()})  
     return list_object_to_insert
 
-
-def get_news():
-    NewsFeed = feedparser.parse("http://noticias.r7.com/feed.xml")
+def get_news(feed):
+    NewsFeed = feedparser.parse(feed)
     entries = NewsFeed.entries
     save_objects = get_obj(entries)
     for obj in save_objects:
         news.insert_one(obj)
-    print("Connected, found {} more news".format(len(save_objects)))
+    print("Connected to feed {}, found {} more news".format(feed,len(save_objects)))
+    
+def run_all_feeds():
+    feeds = ['http://noticias.r7.com/feed.xml',
+             'http://g1.globo.com/dynamo/brasil/rss2.xml',
+             'http://rss.home.uol.com.br/index.xml',
+             'http://rss.tecmundo.com.br/feed']
+    
+    for feed in feeds:
+        get_news(feed)
+    
 
-schedule.every(1).minutes.do(get_news)
+schedule.every(1).minutes.do(run_all_feeds)
 while 1:
     schedule.run_pending()
     time.sleep(1)
