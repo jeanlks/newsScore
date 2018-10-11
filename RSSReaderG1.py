@@ -30,14 +30,14 @@ def get_obj(entries):
 
 
 def get_news():
-    NewsFeed = feedparser.parse("http://g1.globo.com/dynamo/rss2.xml")
+    NewsFeed = feedparser.parse("http://noticias.r7.com/feed.xml")
     entries = NewsFeed.entries
     save_objects = get_obj(entries)
     for obj in save_objects:
         news.insert_one(obj)
     print("Connected, found {} more news".format(len(save_objects)))
 
-schedule.every(5).minutes.do(get_news)
+schedule.every(1).minutes.do(get_news)
 while 1:
     schedule.run_pending()
     time.sleep(1)
