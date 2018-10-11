@@ -66,14 +66,15 @@ def run_all_feeds():
              'http://feeds.bbci.co.uk/portuguese/rss.xml',
              'https://www.correiobraziliense.com.br/rss/noticia/brasil/rss.xml',
              'https://www.correiobraziliense.com.br/rss/noticia/mundo/rss.xml',
-             'http://g1.globo.com/dynamo/mundo/rss2.xml']
+             'http://g1.globo.com/dynamo/mundo/rss2.xml',
+			 'http://g1.globo.com/dynamo/goias/rss2.xml']
     
     for feed in feeds:
         get_news(feed)
 
 #Schedule a task for running every specified minutes
 run_all_feeds()
-schedule.every(1).minutes.do(run_all_feeds)
+schedule.every(5).minutes.do(run_all_feeds)
 while 1:
     schedule.run_pending()
     time.sleep(1)
