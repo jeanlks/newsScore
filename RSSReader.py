@@ -11,6 +11,7 @@ import spacy
 import pymongo
 import time
 
+
 nlp = nlp = spacy.load('pt')
 
 #Connects to mongodb
@@ -46,7 +47,8 @@ def get_obj(entries):
             list_object_to_insert.append({"_id": str(entry.id),
                          "extracted": extracted_list,
                          "extracted_str": extracted_str, 
-                         "timestamp":time.time()})  
+                         "timestamp":time.time(),
+                         "link" :entry.link})  
     return list_object_to_insert
 
 #Get news from a feed and saves to database if does not exists
@@ -66,15 +68,14 @@ def run_all_feeds():
              'http://feeds.bbci.co.uk/portuguese/rss.xml',
              'https://www.correiobraziliense.com.br/rss/noticia/brasil/rss.xml',
              'https://www.correiobraziliense.com.br/rss/noticia/mundo/rss.xml',
-             'http://g1.globo.com/dynamo/mundo/rss2.xml',
-			 'http://g1.globo.com/dynamo/goias/rss2.xml']
+             'http://g1.globo.com/dynamo/mundo/rss2.xml']
     
     for feed in feeds:
         get_news(feed)
 
 #Schedule a task for running every specified minutes
 run_all_feeds()
-schedule.every(5).minutes.do(run_all_feeds)
+schedule.every(1).minutes.do(run_all_feeds)
 while 1:
     schedule.run_pending()
     time.sleep(1)
